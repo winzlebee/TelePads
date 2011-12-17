@@ -1,0 +1,35 @@
+author: wizzledonker
+database: false
+description: Telepads allows players to setup a network of teleport pads which are
+  connected to each other, and teleport when stood upon.
+generator: http://dinnerbone.com/minecraft/tools/pluginator/
+main: me.wizzledonker.plugins.telepads.Telepads
+name: TelePads
+startup: postworld
+version: '1.0'
+commands:
+  createpad:
+    description: Creates a teleport pad with the specified name
+    usage: /<command> <name>
+    aliases: [padcreate, namepad, newpad, setpad]
+  padlink:
+    description: Links two pads together for teleportation
+    usage: /<command> <pad1> <pad2>
+    aliases: [linkpads, tellink, pad2pad]
+  delpad:
+    description: Deletes a teleport pad from the config and reloads the config file.
+    usage: /<command> <pad>
+    aliases: [paddel, destroypad, deletepad]
+permissions:
+  telepads.create:
+    Description: Defines whether or not a player can create a teleport pad
+    Default: op
+  telepads.delete:
+    Description: Defines whether a player can delete a teleport pad
+    Default: op
+  telepads.use:
+    Description: Defines if players may use TelePads
+    Default: true
+  telepads.link:
+    Description: Players with this permission can link telepads
+    Default: op
