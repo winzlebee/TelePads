@@ -1,7 +1,6 @@
 package me.wizzledonker.plugins.telepads;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -24,7 +23,7 @@ public class telepadsPlayerListener extends PlayerListener{
         Player player = event.getPlayer();
         if (player.hasPermission("telepads.use")) {
             Block block = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
-            if (!block.getType().equals(Material.STONE)) {
+            if (block.getTypeId() != plugin.telepad_item_id) {
                 return;
             }
             Location loc = new Location(null, block.getX(), block.getY(), block.getZ());

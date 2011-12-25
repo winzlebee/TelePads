@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
@@ -25,6 +24,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Telepads extends JavaPlugin {
     PlayerListener telepadsPlayerListener = new telepadsPlayerListener(this);
     public Map<Location,String> telepads = new HashMap<Location,String>();
+    
+    public int telepad_item_id = 1;
+    public boolean nodestmsg_enable = false;
     
     telepadsCommands commandex = new telepadsCommands(this);
     
@@ -44,6 +46,7 @@ public class Telepads extends JavaPlugin {
         getCommand("createpad").setExecutor(commandex);
         getCommand("padlink").setExecutor(commandex);
         getCommand("delpad").setExecutor(commandex);
+        getCommand("linkpadhere").setExecutor(commandex);
         
         reloadprops();
         System.out.println(this + " by wizzledonker is now enabled!");
@@ -55,16 +58,17 @@ public class Telepads extends JavaPlugin {
             return;
         }
         Block block = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
-        if (block.getType() == Material.STONE) {
+        if (block.getTypeId() == telepad_item_id) {
             getConfig().set("pads." + name + ".X", block.getX());
             getConfig().set("pads." + name + ".Y", block.getY());
             getConfig().set("pads." + name + ".Z", block.getZ());
+            getConfig().set("pads." + name + ".world", block.getLocation().getWorld().getName());
             getConfig().set("pads." + name + ".dest", null);
             saveConfig();
             player.sendMessage(ChatColor.GREEN + "Successfully created teleport pad " + name);
             reloadprops();
         } else {
-            player.sendMessage(ChatColor.RED + "The block below you is not stone!");
+            player.sendMessage(ChatColor.RED + "The block below you is not of the right type!");
             return;
         }
         
@@ -95,28 +99,56 @@ public class Telepads extends JavaPlugin {
         player.sendMessage(ChatColor.GREEN + "Successfully linked " + pad1 + " to " + pad2);
     }
     
+    public void linkPadHere(Player player, String pad) {
+        if (!player.hasPermission("telepads.linkhere")) {
+            player.sendMessage(ChatColor.RED + "You do not have permission to link this pad here!");
+            return;
+        }
+        if (!getConfig().getConfigurationSection("pads").contains(pad)) {
+            player.sendMessage(ChatColor.RED + "That pad does not exist!");
+            return;
+        }
+        getConfig().set("pads." + pad + ".dest", "location/" + player.getLocation().toString());
+    }
+    
     public void gotoPad(Location loc, Player player) {
         String dest = null;
         dest = getConfig().getString("pads." + getPad(loc) + ".dest");
+//        if (dest.contains("location")) {
+//            //TODO: Handle teleporting the player DTL
+//            return;
+//        }
         if (dest == null || (!getConfig().getConfigurationSection("pads").contains(dest))) {
-            player.sendMessage("No destination!");
+            if (nodestmsg_enable) {
+                player.sendMessage("No destination!");
+            }
             return;
         }
-        player.teleport(new Location(player.getWorld(), getConfig().getInt("pads." + dest + ".X") - 1,
+        player.teleport(new Location((getServer().getWorld(getConfig().getString("pads." + dest + ".world"))),
+                getConfig().getInt("pads." + dest + ".X") - 1,
                 getConfig().getInt("pads." + dest + ".Y"),
-                getConfig().getInt("pads." + dest + ".Z")));
+                getConfig().getInt("pads." + dest + ".Z") + 1));
         player.sendMessage(ChatColor.GREEN + "Successfully teleported to " + ChatColor.WHITE + dest);
     }
     
     public void reloadprops() {
         if (!new File(this.getDataFolder(), "config.yml").exists()) {
-            System.out.println(this + ": No config found. Aborting search...");
+            System.out.println(this + ": No config found. Aborting search, generating one...");
+            getConfig().options().header("For type ID's, go to www.minecraftwiki.net/wiki/Data_values");
+            getConfig().addDefault("pads.properties.type_id", 1);
+            getConfig().addDefault("pads.properties.nodestmsg_enabled", false);
+            getConfig().options().copyDefaults(true);
+            saveConfig();
             return;
         }
+        
+        telepad_item_id = getConfig().getInt("pads.properties.type_id", 1);
+        
+        nodestmsg_enable = getConfig().getBoolean("pads.properties.nodestmsg_enabled", false);
         //This function imports the properties to a hashmap
 
         Location locationTemp = null;
-        // TODO: Make this getList... a propet while statement rather than something that doesnt work.
+        // TODO: Make this getList... a proper while statement rather than something that doesn't work.
         List<String> names = new ArrayList<String>(getConfig().getConfigurationSection("pads").getKeys(false));
         if (names.isEmpty()) {
             System.out.println(this + ": No pads were loaded!");

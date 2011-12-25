@@ -60,6 +60,21 @@ public class telepadsCommands implements CommandExecutor {
                 return false;
             }
         }
+        if (cmnd.getName().equalsIgnoreCase("linkpadhere")) {
+            if (cs instanceof Player) {
+                Player player = (Player) cs;
+                if (args.length == 1) {
+                    plugin.linkPadHere(player, args[0]);
+                    return true;
+                } else {
+                    cs.sendMessage(ChatColor.RED + "Correct Usage:");
+                    return false;
+                }
+            } else {
+                cs.sendMessage("Only players may use that command!");
+                return false;
+            }
+        }
 
 
         return true;
