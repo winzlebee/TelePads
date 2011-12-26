@@ -126,8 +126,8 @@ public class Telepads extends JavaPlugin {
         }
         player.teleport(new Location((getServer().getWorld(getConfig().getString("pads." + dest + ".world"))),
                 getConfig().getInt("pads." + dest + ".X") - 1,
-                getConfig().getInt("pads." + dest + ".Y"),
-                getConfig().getInt("pads." + dest + ".Z") + 1));
+                getConfig().getInt("pads." + dest + ".Y") + 1,
+                getConfig().getInt("pads." + dest + ".Z")));
         player.sendMessage(ChatColor.GREEN + "Successfully teleported to " + ChatColor.WHITE + dest);
     }
     
