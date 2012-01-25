@@ -35,7 +35,7 @@ public class Telepads extends JavaPlugin {
     public String wait_msg = "Teleporting in %time%, stay on the pad!";
     public boolean teleport_msg_enable = true;
     
-    FileConfiguration padConfig = pads.getPadConfig();
+    FileConfiguration padConfig = null;
     
     public void onDisable() {
         // Save the pad config file to disk
@@ -45,6 +45,7 @@ public class Telepads extends JavaPlugin {
 
     public void onEnable() {
         PluginManager pm = this.getServer().getPluginManager();
+        padConfig = pads.getPadConfig();
         
         //Registering events
         pm.registerEvents(telepadsPlayerListener, this);
