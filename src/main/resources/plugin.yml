@@ -23,7 +23,14 @@ commands:
     description: Link a teleport pad to your current location.
     usage: /<command> <pad>
     aliases: [lph, linkpad2p, padtome]
+  padlist:
+    description: List all the available pads for teleportation
+    usage: /<command>
+    aliases: [listpad, listpads, pads, telepads]
 permissions:
+  telepads.list:
+    Description: Defines whether a player can view the pad list
+    Default: op
   telepads.create:
     Description: Defines whether or not a player can create a teleport pad
     Default: op

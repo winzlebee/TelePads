@@ -75,6 +75,22 @@ public class telepadsCommands implements CommandExecutor {
                 return false;
             }
         }
+        if (cmnd.getName().equalsIgnoreCase("padlist")) {
+            if (!cs.hasPermission("telepads.list")) {
+                cs.sendMessage(ChatColor.RED + "You do not have permission to perform this command.");
+                return true;
+            }
+            StringBuilder sb = new StringBuilder();
+            sb.append(ChatColor.GREEN).
+                    append("------").append(ChatColor.RED).
+                    append("Telepads").
+                    append(ChatColor.GREEN).append("------");
+            cs.sendMessage(sb.toString());
+            for (String s : plugin.telepads.values()) {
+                cs.sendMessage(" - " + s);
+            }
+            return true;
+        }
 
 
         return true;
