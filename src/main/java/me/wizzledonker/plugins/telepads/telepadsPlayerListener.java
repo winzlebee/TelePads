@@ -45,6 +45,7 @@ public class telepadsPlayerListener implements Listener{
                     onPad.remove(player);
                     Block cBlock = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
                     if (!checkPad(cBlock)) return;
+                    if (!plugin.telepads.containsKey(loc)) return;
                     plugin.gotoPad(loc, player);
                 }
             }, plugin.telepad_teleport_time * 20L);
