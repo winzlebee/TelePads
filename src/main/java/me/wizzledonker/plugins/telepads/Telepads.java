@@ -32,7 +32,7 @@ public class Telepads extends JavaPlugin {
     public boolean nodestmsg_enable = true;
     
     public String teleport_msg = "Teleported to %pad%";
-    public String wait_msg = "Teleporting in %time%, stay on the pad!";
+    public String wait_msg = "Teleporting in %time%, stay on the pad! You will be teleported shortly.";
     public boolean teleport_msg_enable = true;
     
     FileConfiguration padConfig = null;
@@ -86,7 +86,7 @@ public class Telepads extends JavaPlugin {
     
     public void deletePad(CommandSender player, String name) {
         if (!player.hasPermission("telepads.delete")) {
-            player.sendMessage(ChatColor.RED + "You do not have permission to delete this Teleport Pad!");
+            player.sendMessage(ChatColor.RED + "You do not have permission to delete this teleport pad!");
             return;
         }
         if (!padConfig.getConfigurationSection("pads").contains(name)) {
