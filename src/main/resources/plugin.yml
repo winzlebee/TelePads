@@ -5,7 +5,7 @@ description: Telepads allows players to setup a network of teleport pads which a
 main: me.wizzledonker.plugins.telepads.Telepads
 name: TelePads
 startup: postworld
-version: '1.4.1'
+version: '1.5'
 commands:
   createpad:
     description: Creates a teleport pad with the specified name
@@ -15,6 +15,10 @@ commands:
     description: Links two pads together for teleportation
     usage: /<command> <pad1> <pad2>
     aliases: [linkpads, tellink, pad2pad]
+  padunlink:
+    description: Unlinks a pad and sets it to go nowhere
+    usage: /<command> <pad>
+    aliases: [unlinkpads, onewaypad]
   delpad:
     description: Deletes a teleport pad from the config and reloads the config file.
     usage: /<command> <pad>
@@ -46,3 +50,9 @@ permissions:
   telepads.linkhere:
     Description: Players with this permission can link pads to their location
     Default: op
+  telepads.unlink:
+    Description: Players with this permission can unlink a telepad
+    Default: op
+  telepads.pads:
+    Description: Grants access to all telepads
+    Default: true

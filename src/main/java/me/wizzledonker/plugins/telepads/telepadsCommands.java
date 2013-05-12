@@ -51,6 +51,15 @@ public class telepadsCommands implements CommandExecutor {
                 return false;
             }
         }
+        if (cmnd.getName().equalsIgnoreCase("padunlink")) {
+            if (args.length == 1) {
+                plugin.unLinkPad(args[0], cs);
+                return true;
+            } else {
+                cs.sendMessage(ChatColor.RED + "Correct Usage:");
+                return false;
+            }
+        }
         if (cmnd.getName().equalsIgnoreCase("delpad")) {
             if (args.length == 1) {
                 plugin.deletePad(cs, args[0]);
@@ -60,34 +69,25 @@ public class telepadsCommands implements CommandExecutor {
                 return false;
             }
         }
-        if (cmnd.getName().equalsIgnoreCase("linkpadhere")) {
-            if (cs instanceof Player) {
-                Player player = (Player) cs;
-                if (args.length == 1) {
-                    plugin.linkPadHere(player, args[0]);
-                    return true;
-                } else {
-                    cs.sendMessage(ChatColor.RED + "Correct Usage:");
-                    return false;
-                }
-            } else {
-                cs.sendMessage("Only players may use that command!");
-                return false;
-            }
-        }
         if (cmnd.getName().equalsIgnoreCase("padlist")) {
             if (!cs.hasPermission("telepads.list")) {
                 cs.sendMessage(ChatColor.RED + "You do not have permission to perform this command.");
                 return true;
             }
+            // Build the telepad list
             StringBuilder sb = new StringBuilder();
             sb.append(ChatColor.GREEN).
                     append("------").append(ChatColor.RED).
                     append("Telepads").
                     append(ChatColor.GREEN).append("------");
             cs.sendMessage(sb.toString());
+            if (plugin.telepads.values().isEmpty()) {
+                cs.sendMessage(ChatColor.AQUA + "There are currently no pads.");
+                return true;
+            }
             for (String s : plugin.telepads.values()) {
                 cs.sendMessage(" - " + s);
+                cs.sendMessage(ChatColor.AQUA + "* linked to " + plugin.teleLink.get(s));
             }
             return true;
         }
