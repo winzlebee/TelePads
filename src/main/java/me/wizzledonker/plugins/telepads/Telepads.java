@@ -7,13 +7,13 @@ package me.wizzledonker.plugins.telepads;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import me.wizzledonker.plugins.telepads.config.padConfiguration;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
@@ -167,6 +167,10 @@ public class Telepads extends JavaPlugin {
         
         tele.setPitch((float) padConfig.getDouble("pads." + dest + ".pitch"));
         tele.setYaw((float) padConfig.getDouble("pads." + dest + ".yaw"));
+        
+        if (tele.getBlock().getType() != Material.AIR) {
+            tele.add(0, 2, 0);
+        }
         
         player.teleport(tele);
         
